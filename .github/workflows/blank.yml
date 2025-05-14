@@ -1,4 +1,8 @@
 import datetime
+import os
+
+def arquivo_existe(nome_arquivo):
+    return os.path.exists(nome_arquivo)
 
 def adicionarpet():
     nome = input("Nome do pet: ")
@@ -6,32 +10,32 @@ def adicionarpet():
     raca = input("Raça: ")
     nascimento = input("Data de nascimento: ")
     peso = input("Peso(kg): ")
-    arquivo = open("pets.txt", "a")
-    arquivo.write(f"{nome};{especie};{raca};{nascimento};{peso}\n")
-    arquivo.close()
+    with open("pets.txt", "a") as arquivo:
+        arquivo.write(f"{nome};{especie};{raca};{nascimento};{peso}\n")
     print("Pet cadastrado.")
 
 def visualizarpet():
-    try:
-        arquivo = open("pets.txt", "r")
+    if not arquivo_existe("pets.txt"):
+        print("Nenhum pet cadastrado.")
+        return
+    with open("pets.txt", "r") as arquivo:
         linhas = arquivo.readlines()
-        for i in range(len(linhas)):
-            linha = linhas[i]
+        for linha in linhas:
             nome, especie, raca, nascimento, peso = linha.strip().split(";")
             print(f"Nome: {nome} | Espécie: {especie} | Raça: {raca} | Nascimento: {nascimento} | Peso: {peso}kg")
-        arquivo.close()
-    except FileNotFoundError:
-        print("Nenhum pet cadastrado.")
 
 def editarpet():
     nome_pet = input("Digite o nome do pet que deseja editar: ")
+    if not arquivo_existe("pets.txt"):
+        print("Arquivo de pets não encontrado.")
+        return
+    
     pets = []
-    try:
-        arquivo = open("pets.txt", "r")
+    encontrado = False
+    with open("pets.txt", "r") as arquivo:
         linhas = arquivo.readlines()
-        for i in range(len(linhas)):
-            linha = linhas[i]
-            if linha.startswith(nome_pet, ";"):
+        for linha in linhas:
+            if linha.startswith(nome_pet + ";"):
                 print("Digite os novos dados:")
                 nome = input("Novo nome: ")
                 especie = input("Nova espécie: ")
@@ -39,125 +43,104 @@ def editarpet():
                 nascimento = input("Nova data de nascimento: ")
                 peso = input("Novo peso: ")
                 pets.append(f"{nome};{especie};{raca};{nascimento};{peso}\n")
+                encontrado = True
             else:
                 pets.append(linha)
-        arquivo.close()
-        
-        nomes_atuais = []
-        for i in range(len(pets)):
-            nomes_atuais.append(pets[i].split(";")[0])
-        
-        if nome_pet in nomes_atuais:
-            arquivo = open("pets.txt", "w")
+    
+    if encontrado:
+        with open("pets.txt", "w") as arquivo:
             arquivo.writelines(pets)
-            arquivo.close()
-            print("Pet atualizado com sucesso!")
-        else:
-            print("Pet não encontrado.")
-    except FileNotFoundError:
-        print("Arquivo de pets não encontrado.")
+        print("Pet atualizado com sucesso!")
+    else:
+        print("Pet não encontrado.")
 
 def excluirpet():
     nome_pet = input("Digite o nome do pet que deseja excluir: ")
+    if not arquivo_existe("pets.txt"):
+        print("Arquivo de pets não encontrado.")
+        return
+    
     pets = []
-    try:
-        arquivo = open("pets.txt", "r")
+    excluido = False
+    with open("pets.txt", "r") as arquivo:
         linhas = arquivo.readlines()
-        for i in range(len(linhas)):
-            linha = linhas[i]
-            if linha.startswith(nome_pet, ";"):
-                print(f"Pet {nome_pet} encontrado e excluído.")
+        for linha in linhas:
+            if linha.startswith(nome_pet + ";"):
+                excluido = True
             else:
                 pets.append(linha)
-        arquivo.close()
-    except FileNotFoundError:
+    
+    if excluido:
+        with open("pets.txt", "w") as arquivo:
+            arquivo.writelines(pets)
+        print(f"Pet {nome_pet} excluído.")
+    else:
         print("Pet não encontrado.")
-        return
-    arquivo = open("pets.txt", "w")
-    arquivo.writelines(pets)
-    arquivo.close()
-    print("Pet excluído.")
 
 def registrarevento():
     data = input("Data do evento: ")
     nome_pet = input("Nome do pet: ")
     tipo_evento = input("Tipo de evento(vacina, consulta, remédio): ").lower()
     observacoes = input("Observações: ")
-    arquivo = open("eventos.txt", "a")
-    linha = (f"{data};{nome_pet};{tipo_evento};{observacoes}\n")
-    arquivo.write(linha)
-    arquivo.close()
+    with open("eventos.txt", "a") as arquivo:
+        arquivo.write(f"{data};{nome_pet};{tipo_evento};{observacoes}\n")
     print("Evento registrado.")
 
 def exibireventos():
-    try:
-        arquivo = open("eventos.txt", "r")
+    if not arquivo_existe("eventos.txt"):
+        print("Nenhum evento registrado.")
+        return
+    with open("eventos.txt", "r") as arquivo:
         linhas = arquivo.readlines()
-        for i in range(len(linhas)):
-            linha = linhas[i]
+        for linha in linhas:
             data, nome_pet, tipo, obs = linha.strip().split(";")
             print(f"Data: {data} | Pet: {nome_pet} | Tipo: {tipo} | Obs: {obs}")
-        arquivo.close()
-    except FileNotFoundError:
-        print("Nenhum evento registrado.")
 
 def definirmeta():
     descricao = input("Descrição da meta: ")
     frequencia = input("Frequência: ")
-    arquivo = open("metas.txt", "a")
-    arquivo.write(f"{descricao};{frequencia}\n")
-    arquivo.close()
+    with open("metas.txt", "a") as arquivo:
+        arquivo.write(f"{descricao};{frequencia}\n")
     print("Meta registrada.")
 
 def exibirmetas():
-    try:
-        arquivo = open("metas.txt", "r")
+    if not arquivo_existe("metas.txt"):
+        print("Nenhuma meta definida.")
+        return
+    with open("metas.txt", "r") as arquivo:
         linhas = arquivo.readlines()
-        for i in range(len(linhas)):
-            linha = linhas[i]
+        for linha in linhas:
             descricao, frequencia = linha.strip().split(";")
             print(f"Meta: {descricao} | Frequência: {frequencia}")
-        arquivo.close()
-    except FileNotFoundError:
-        print("Nenhuma meta definida.")
 
 def cumprirmeta():
     descricao = input("Digite a descrição exata da meta que você cumpriu: ")
     data = datetime.datetime.now().strftime("%d/%m/%Y")
-    arquivo = open("cumprimentos.txt", "a")
-    arquivo.write(f"{descricao};{data}\n")
-    arquivo.close()
+    with open("cumprimentos.txt", "a") as arquivo:
+        arquivo.write(f"{descricao};{data}\n")
     print("Cumprimento registrado.")
 
 def verificarcumprimento():
-    try:
-        arquivo = open("metas.txt", "r")
-        linhas_metas = arquivo.readlines()
-        metas = []
-        for i in range(len(linhas_metas)):
-            partes = linhas_metas[i].strip().split(";")
-            metas.append(partes[0])
-        arquivo.close()
-    except FileNotFoundError:
+    if not arquivo_existe("metas.txt"):
         print("Nenhuma meta registrada.")
         return
-    try:
-        arquivo = open("cumprimentos.txt", "r")
-        linhas_cumprimentos = arquivo.readlines()
-        registros = []
-        for i in range(len(linhas_cumprimentos)):
-            partes = linhas_cumprimentos[i].strip().split(";")
-            registros.append(partes[0])
-        arquivo.close()
-    except FileNotFoundError:
-        registros = []
+    with open("metas.txt", "r") as arquivo:
+        linhas_metas = arquivo.readlines()
+    metas = [linha.strip().split(";")[0] for linha in linhas_metas]
+
+    registros = []
+    if arquivo_existe("cumprimentos.txt"):
+        with open("cumprimentos.txt", "r") as arquivo:
+            linhas_cumprimentos = arquivo.readlines()
+            registros = [linha.strip().split(";")[0] for linha in linhas_cumprimentos]
+
     for meta in metas:
         vezes = registros.count(meta)
         print(f"Meta: {meta} | Cumprimentos registrados: {vezes}")
 
 def sugestoescuidados():
     especie = input("Espécie do pet (cachorro/gato): ").lower()
-    idade = float(input("Idade do pet (em anos, use número com vírgula se necessário): "))
+    idade = float(input("Idade do pet (em anos, use número com vírgula se necessário): ").replace(',', '.'))
     porte = input("Porte do pet (pequeno/médio/grande): ").lower()
 
     if especie == "cachorro":
@@ -242,5 +225,3 @@ while True:
         verificarcumprimento()
     elif opcao == "11":
         sugestoescuidados()
-    elif opcao == "0":
-        print("Finalizando sistem
