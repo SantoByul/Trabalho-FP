@@ -1,0 +1,246 @@
+import datetime
+
+def adicionarpet():
+    nome = input("Nome do pet: ")
+    especie = input("Espécie: ")
+    raca = input("Raça: ")
+    nascimento = input("Data de nascimento: ")
+    peso = input("Peso(kg): ")
+    arquivo = open("pets.txt", "a")
+    arquivo.write(f"{nome};{especie};{raca};{nascimento};{peso}\n")
+    arquivo.close()
+    print("Pet cadastrado.")
+
+def visualizarpet():
+    try:
+        arquivo = open("pets.txt", "r")
+        linhas = arquivo.readlines()
+        for i in range(len(linhas)):
+            linha = linhas[i]
+            nome, especie, raca, nascimento, peso = linha.strip().split(";")
+            print(f"Nome: {nome} | Espécie: {especie} | Raça: {raca} | Nascimento: {nascimento} | Peso: {peso}kg")
+        arquivo.close()
+    except FileNotFoundError:
+        print("Nenhum pet cadastrado.")
+
+def editarpet():
+    nome_pet = input("Digite o nome do pet que deseja editar: ")
+    pets = []
+    try:
+        arquivo = open("pets.txt", "r")
+        linhas = arquivo.readlines()
+        for i in range(len(linhas)):
+            linha = linhas[i]
+            if linha.startswith(nome_pet, ";"):
+                print("Digite os novos dados:")
+                nome = input("Novo nome: ")
+                especie = input("Nova espécie: ")
+                raca = input("Nova raça: ")
+                nascimento = input("Nova data de nascimento: ")
+                peso = input("Novo peso: ")
+                pets.append(f"{nome};{especie};{raca};{nascimento};{peso}\n")
+            else:
+                pets.append(linha)
+        arquivo.close()
+        
+        nomes_atuais = []
+        for i in range(len(pets)):
+            nomes_atuais.append(pets[i].split(";")[0])
+        
+        if nome_pet in nomes_atuais:
+            arquivo = open("pets.txt", "w")
+            arquivo.writelines(pets)
+            arquivo.close()
+            print("Pet atualizado com sucesso!")
+        else:
+            print("Pet não encontrado.")
+    except FileNotFoundError:
+        print("Arquivo de pets não encontrado.")
+
+def excluirpet():
+    nome_pet = input("Digite o nome do pet que deseja excluir: ")
+    pets = []
+    try:
+        arquivo = open("pets.txt", "r")
+        linhas = arquivo.readlines()
+        for i in range(len(linhas)):
+            linha = linhas[i]
+            if linha.startswith(nome_pet, ";"):
+                print(f"Pet {nome_pet} encontrado e excluído.")
+            else:
+                pets.append(linha)
+        arquivo.close()
+    except FileNotFoundError:
+        print("Pet não encontrado.")
+        return
+    arquivo = open("pets.txt", "w")
+    arquivo.writelines(pets)
+    arquivo.close()
+    print("Pet excluído.")
+
+def registrarevento():
+    data = input("Data do evento: ")
+    nome_pet = input("Nome do pet: ")
+    tipo_evento = input("Tipo de evento(vacina, consulta, remédio): ").lower()
+    observacoes = input("Observações: ")
+    arquivo = open("eventos.txt", "a")
+    linha = (f"{data};{nome_pet};{tipo_evento};{observacoes}\n")
+    arquivo.write(linha)
+    arquivo.close()
+    print("Evento registrado.")
+
+def exibireventos():
+    try:
+        arquivo = open("eventos.txt", "r")
+        linhas = arquivo.readlines()
+        for i in range(len(linhas)):
+            linha = linhas[i]
+            data, nome_pet, tipo, obs = linha.strip().split(";")
+            print(f"Data: {data} | Pet: {nome_pet} | Tipo: {tipo} | Obs: {obs}")
+        arquivo.close()
+    except FileNotFoundError:
+        print("Nenhum evento registrado.")
+
+def definirmeta():
+    descricao = input("Descrição da meta: ")
+    frequencia = input("Frequência: ")
+    arquivo = open("metas.txt", "a")
+    arquivo.write(f"{descricao};{frequencia}\n")
+    arquivo.close()
+    print("Meta registrada.")
+
+def exibirmetas():
+    try:
+        arquivo = open("metas.txt", "r")
+        linhas = arquivo.readlines()
+        for i in range(len(linhas)):
+            linha = linhas[i]
+            descricao, frequencia = linha.strip().split(";")
+            print(f"Meta: {descricao} | Frequência: {frequencia}")
+        arquivo.close()
+    except FileNotFoundError:
+        print("Nenhuma meta definida.")
+
+def cumprirmeta():
+    descricao = input("Digite a descrição exata da meta que você cumpriu: ")
+    data = datetime.datetime.now().strftime("%d/%m/%Y")
+    arquivo = open("cumprimentos.txt", "a")
+    arquivo.write(f"{descricao};{data}\n")
+    arquivo.close()
+    print("Cumprimento registrado.")
+
+def verificarcumprimento():
+    try:
+        arquivo = open("metas.txt", "r")
+        linhas_metas = arquivo.readlines()
+        metas = []
+        for i in range(len(linhas_metas)):
+            partes = linhas_metas[i].strip().split(";")
+            metas.append(partes[0])
+        arquivo.close()
+    except FileNotFoundError:
+        print("Nenhuma meta registrada.")
+        return
+    try:
+        arquivo = open("cumprimentos.txt", "r")
+        linhas_cumprimentos = arquivo.readlines()
+        registros = []
+        for i in range(len(linhas_cumprimentos)):
+            partes = linhas_cumprimentos[i].strip().split(";")
+            registros.append(partes[0])
+        arquivo.close()
+    except FileNotFoundError:
+        registros = []
+    for meta in metas:
+        vezes = registros.count(meta)
+        print(f"Meta: {meta} | Cumprimentos registrados: {vezes}")
+
+def sugestoescuidados():
+    especie = input("Espécie do pet (cachorro/gato): ").lower()
+    idade = float(input("Idade do pet (em anos, use número com vírgula se necessário): "))
+    porte = input("Porte do pet (pequeno/médio/grande): ").lower()
+
+    if especie == "cachorro":
+        if idade < 1:
+            print("• Vacinação completa")
+            print("• Rações específicas para filhotes")
+            print("• Visitas ao veterinário a cada 2 a 3 meses")
+            print("• Brinquedos para dentição")
+        else:
+            print("• Alimentação equilibrada com ração para adultos")
+            print("• Consultas veterinárias a cada 6 meses")
+            print("• Atividades físicas regulares")
+            if porte == "pequeno":
+                print("• Caminhadas curtas diárias")
+                print("• Cuidados com o frio (roupas, caminhas quentes)")
+            elif porte == "médio":
+                print("• Exercícios moderados")
+                print("• Espaço razoável para se movimentar")
+            elif porte == "grande":
+                print("• Exercícios intensos e caminhadas longas")
+                print("• Acesso a áreas abertas e maiores")
+            else:
+                print("Porte não reconhecido. Informe pequeno, médio ou grande.")
+
+    elif especie == "gato":
+        if idade < 1:
+            print("• Brinquedos leves e seguros")
+            print("• Caixa de areia acessível")
+            print("• Ração para filhotes")
+            print("• Vacinação completa")
+        else:
+            print("• Ração específica para adultos")
+            print("• Escovação regular (principalmente se peludo)")
+            print("• Sessões de brincadeiras interativas")
+            if porte == "pequeno":
+                print("• Brinquedos pequenos e acessíveis")
+            elif porte == "médio":
+                print("• Arranhadores de tamanho médio")
+            elif porte == "grande":
+                print("• Espaço vertical (prateleiras, torres)")
+                print("• Monitoramento do peso")
+            else:
+                print("Porte não reconhecido. Informe pequeno, médio ou grande.")
+    else:
+        print("Espécie não reconhecida. Informe 'cachorro' ou 'gato'.")
+        
+while True:
+    print("\n--- VIDA PET ---")
+    print("1. Adicionar Pet")
+    print("2. Visualizar Pets")
+    print("3. Editar Pet")
+    print("4. Excluir Pet")
+    print("5. Registrar Evento")
+    print("6. Exibir Eventos")
+    print("7. Definir Meta de Saúde")
+    print("8. Exibir Metas")
+    print("9. Cumprir Meta")
+    print("10. Verificar Cumprimento de Metas")
+    print("11. Sugestões de Cuidados")
+    print("0. Sair")
+
+    opcao = input("Escolha uma opção: ")
+    if opcao == "1":
+        adicionarpet()
+    elif opcao == "2":
+        visualizarpet()
+    elif opcao == "3":
+        editarpet()
+    elif opcao == "4":
+        excluirpet()
+    elif opcao == "5":
+        registrarevento()
+    elif opcao == "6":
+        exibireventos()
+    elif opcao == "7":
+        definirmeta()
+    elif opcao == "8":
+        exibirmetas()
+    elif opcao == "9":
+        cumprirmeta()
+    elif opcao == "10":
+        verificarcumprimento()
+    elif opcao == "11":
+        sugestoescuidados()
+    elif opcao == "0":
+        print("Finalizando sistem
