@@ -4,23 +4,16 @@ import os
 petslist = []
 portesvalidos = ["pequeno", "medio", "grande"]
 opcoespetshop = {
-    "1": "Unidade Boa Viagem",
-    "2": "Unidade Espinheiro",
-    "3": "Unidade Caxangá",
-    "4": "Unidade Recife Antigo"
-}
-
-localizacoespetshop = {
-    "1": "Unidade Boa Viagem - Av. Domingos Ferreira, Recife - PE",
-    "2": "Unidade Espinheiro - R. do Espinheiro, Recife - PE",
-    "3": "Unidade Caxangá - Av. Caxangá, Recife - PE",
-    "4": "Unidade Recife Antigo - R. do Bom Jesus, Recife - PE"
+    "1": "Unidade Boa Viagem - Recife",
+    "2": "Unidade Espinheiro - Recife",
+    "3": "Unidade Caxangá - Recife",
+    "4": "Unidade Recife Antigo - Recife"
 }
 
 def arquivoexiste(nomearquivo):
     return os.path.exists(nomearquivo)
 
-def adicionapet():
+def adicionarpet():
     nome = input("Nome do pet: ").lower()
     if not nome:
         print("Você não inseriu um nome.")
@@ -48,34 +41,39 @@ def adicionapet():
     print("Pet cadastrado.")
     print("Lista dos seus pets:", petslist)
 
-def visualizapet():
-    if not arquivoexiste("pets.txt"):
-        print("Nenhum pet cadastrado.")
-        return
-    arquivo = open("pets.txt", "r")
-    linhas = arquivo.readlines()
-    arquivo.close()
-    for linha in sorted(linhas):
-        partes = linha.strip().split(";")
-        if len(partes) == 5:
-            nome, especie, porte, nascimento, peso = partes
-            print(f"Nome: {nome} | Espécie: {especie} | Porte: {porte} | Nascimento: {nascimento} | Peso: {peso}kg")
-        else:
-            print(f"[⚠️ Linha inválida ignorada]: {linha.strip()}")
+def visualizarpet():
+    try:
+        if not arquivoexiste("pets.txt"):
+            print("Nenhum pet cadastrado.")
+            return
+        arquivo = open("pets.txt", "r")
+        linhas = arquivo.readlines()
+        arquivo.close()
+        if not linhas:
+            print("Não há conteúdo no arquivo para ser visualizado.")
+            return
+        for linha in sorted(linhas):
+            partes = linha.strip().split(";")
+            if len(partes) == 5:
+                nome, especie, porte, nascimento, peso = partes
+                print(f"Nome: {nome} | Espécie: {especie} | Porte: {porte} | Nascimento: {nascimento} | Peso: {peso}kg")
+            else:
+                print(f"[⚠️ Linha inválida ignorada]: {linha.strip()}")
+    except FileNotFoundError:
+        print("Arquivo não encontrado. Nenhum pet cadastrado.")
 
-def editapet():
+def editarpet():
     nomepet = input("Digite o nome do pet que deseja editar: ")
     if not arquivoexiste("pets.txt"):
         print("Arquivo de pets não encontrado.")
         return
-    pets = []
-    encontrado = False
     arquivo = open("pets.txt", "r")
     linhas = arquivo.readlines()
     arquivo.close()
+    pets = []
+    encontrado = False
     for linha in linhas:
         if linha.startswith(nomepet + ";"):
-            print("Digite os novos dados:")
             nome = input("Novo nome: ")
             especie = input("Nova espécie: ")
             porte = input("Novo porte: ")
@@ -93,16 +91,16 @@ def editapet():
     else:
         print("Pet não encontrado.")
 
-def excluipet():
+def excluirpet():
     nomepet = input("Digite o nome do pet que deseja excluir: ")
     if not arquivoexiste("pets.txt"):
         print("Arquivo de pets não encontrado.")
         return
-    pets = []
-    excluido = False
     arquivo = open("pets.txt", "r")
     linhas = arquivo.readlines()
     arquivo.close()
+    pets = []
+    excluido = False
     for linha in linhas:
         if linha.startswith(nomepet + ";"):
             excluido = True
@@ -116,7 +114,10 @@ def excluipet():
     else:
         print("Pet não encontrado.")
 
-def registraevento():
+def registrarevento():
+    if not arquivoexiste("pets.txt") or os.stat("pets.txt").st_size == 0:
+        print("Você não tem pets cadastrados.")
+        return
     data = input("Data do evento: ")
     nomepet = input("Nome do pet: ")
     tipoevento = input("Tipo de evento (vacina, consulta, remédio): ").lower()
@@ -126,7 +127,7 @@ def registraevento():
     arquivo.close()
     print("Evento registrado.")
 
-def exibeeventos():
+def exibireventos():
     if not arquivoexiste("eventos.txt"):
         print("Nenhum evento registrado.")
         return
@@ -134,10 +135,12 @@ def exibeeventos():
     linhas = arquivo.readlines()
     arquivo.close()
     for linha in linhas:
-        data, nomepet, tipo, obs = linha.strip().split(";")
-        print(f"Data: {data} | Pet: {nomepet} | Tipo: {tipo} | Obs: {obs}")
+        partes = linha.strip().split(";")
+        if len(partes) == 4:
+            data, nomepet, tipo, obs = partes
+            print(f"Data: {data} | Pet: {nomepet} | Tipo: {tipo} | Obs: {obs}")
 
-def definemeta():
+def definirmeta():
     descricao = input("Descrição da meta: ")
     frequencia = input("Frequência: ")
     arquivo = open("metas.txt", "a")
@@ -145,7 +148,7 @@ def definemeta():
     arquivo.close()
     print("Meta registrada.")
 
-def exibemetas():
+def exibirmetas():
     if not arquivoexiste("metas.txt"):
         print("Nenhuma meta definida.")
         return
@@ -153,10 +156,12 @@ def exibemetas():
     linhas = arquivo.readlines()
     arquivo.close()
     for linha in linhas:
-        descricao, frequencia = linha.strip().split(";")
-        print(f"Meta: {descricao} | Frequência: {frequencia}")
+        partes = linha.strip().split(";")
+        if len(partes) == 2:
+            descricao, frequencia = partes
+            print(f"Meta: {descricao} | Frequência: {frequencia}")
 
-def cumprameta():
+def cumprirmeta():
     descricao = input("Digite a descrição exata da meta que você cumpriu: ")
     data = datetime.datetime.now().strftime("%d/%m/%Y")
     arquivo = open("cumprimentos.txt", "a")
@@ -164,28 +169,38 @@ def cumprameta():
     arquivo.close()
     print("Cumprimento registrado.")
 
-def verificacumprimento():
+def verificarcumprimento():
     if not arquivoexiste("metas.txt"):
         print("Nenhuma meta registrada.")
         return
     arquivo = open("metas.txt", "r")
     linhasmetas = arquivo.readlines()
     arquivo.close()
-    metas = [linha.strip().split(";")[0] for linha in linhasmetas]
+    metas = []
+    for linha in linhasmetas:
+        partes = linha.strip().split(";")
+        metas.append(partes[0])
     registros = []
     if arquivoexiste("cumprimentos.txt"):
         arquivo = open("cumprimentos.txt", "r")
         linhascumprimentos = arquivo.readlines()
         arquivo.close()
-        registros = [linha.strip().split(";")[0] for linha in linhascumprimentos]
+        for linha in linhascumprimentos:
+            partes = linha.strip().split(";")
+            registros.append(partes[0])
     for meta in metas:
         vezes = registros.count(meta)
         print(f"Meta: {meta} | Cumprimentos registrados: {vezes}")
 
 def sugestoescuidados():
     especie = input("Espécie do pet (cachorro/gato): ").lower()
-    idade = float(input("Idade do pet (em anos, use número com vírgula se necessário): ").replace(',', '.'))
-    porte = input("Porte do pet (pequeno/medio/grande): ").lower()
+    idadeinput = input("Idade do pet (em anos, use número com vírgula se necessário): ").replace(',', '.')
+    try:
+        idade = float(idadeinput)
+    except ValueError:
+        print("Idade inválida. Insira um número.")
+        return
+    porte = input("Porte do pet (pequeno/médio/grande): ").lower()
     if especie == "cachorro":
         if idade < 1:
             print("• Vacinação completa")
@@ -206,7 +221,7 @@ def sugestoescuidados():
                 print("• Exercícios intensos e caminhadas longas")
                 print("• Acesso a áreas abertas e maiores")
             else:
-                print("Porte não reconhecido. Informe pequeno, medio ou grande.")
+                print("Porte não reconhecido. Informe pequeno, médio ou grande.")
     elif especie == "gato":
         if idade < 1:
             print("• Brinquedos leves e seguros")
@@ -231,17 +246,16 @@ def sugestoescuidados():
 
 def escolherpetshopproximo():
     print("\n--- Escolha o Petshop Mais Próximo ---")
-    for chave, nomepetshop in opcoespetshop.items():
+    for chave in opcoespetshop:
+        nomepetshop = opcoespetshop[chave]
         print(f"{chave}. {nomepetshop}")
     while True:
         opcao = input("Digite o número do petshop desejado: ")
         if opcao in opcoespetshop:
             petshopescolhido = opcoespetshop[opcao]
-            localizacao = localizacoespetshop[opcao]
             print(f"Você escolheu: {petshopescolhido}")
-            print(f"Localização: {localizacao}")
             arquivo = open("petshopescolhido.txt", "a")
-            arquivo.write(f"{petshopescolhido} - {localizacao}\n")
+            arquivo.write(f"{petshopescolhido}\n")
             arquivo.close()
             break
         else:
@@ -265,25 +279,25 @@ while True:
 
     opcao = input("Escolha uma opção: ")
     if opcao == "1":
-        adicionapet()
+        adicionarpet()
     elif opcao == "2":
-        visualizapet()
+        visualizarpet()
     elif opcao == "3":
-        editapet()
+        editarpet()
     elif opcao == "4":
-        excluipet()
+        excluirpet()
     elif opcao == "5":
-        registraevento()
+        registrarevento()
     elif opcao == "6":
-        exibeeventos()
+        exibireventos()
     elif opcao == "7":
-        definemeta()
+        definirmeta()
     elif opcao == "8":
-        exibemetas()
+        exibirmetas()
     elif opcao == "9":
-        cumprameta()
+        cumprirmeta()
     elif opcao == "10":
-        verificacumprimento()
+        verificarcumprimento()
     elif opcao == "11":
         sugestoescuidados()
     elif opcao == "12":
