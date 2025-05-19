@@ -45,7 +45,7 @@ def adicionarpet():
         print("Você não inseriu uma data de nascimento.")
         return
         
-    peso = input("Peso(kg): ")
+    peso = input("Peso(em kg): ")
     
     if not peso:
         
