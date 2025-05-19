@@ -44,10 +44,13 @@ def adicionarpet():
         
         print("Você não inseriu uma data de nascimento.")
         return
+    try:    
+        peso1 = int(input("Peso(em kg): "))
+        peso = str(peso1)
         
-    peso1 = int(input("Peso(em kg): "))
-    peso = str(peso1)
-    
+    except ValueError:
+        print("Insira apenas o peso.")
+        
     if not peso:
         
         print("Você não inseriu um peso.")
