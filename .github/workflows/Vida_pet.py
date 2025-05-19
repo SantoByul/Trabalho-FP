@@ -50,7 +50,8 @@ def adicionarpet():
         
     except ValueError:
         print("Insira apenas o peso.")
-        
+        return
+    
     if not peso:
         
         print("Você não inseriu um peso.")
