@@ -466,8 +466,3 @@ while True:
         
         print("Opção inválida. Tente novamente.")
 
-#essa função  limpar arquivos serve para toda vez que o terminal é fechado os arquivos inseridos 
-#são apagados então na proxima vez que abrir o terminal só vai estar salvo as novas informações , não as antigas .
-def limpar_arquivo_pets():
-    open("pets.txt", "w").close()
-    print("Arquivo de pets limpo.")
