@@ -4,6 +4,7 @@ import os
 petslist = []
 portesvalidos = ["pequeno", "medio", "grande"]
 opcoespetshop = {
+    
     "1": "Unidade Boa Viagem - Recife",
     "2": "Unidade Espinheiro - Recife",
     "3": "Unidade Caxangá - Recife",
@@ -11,22 +12,31 @@ opcoespetshop = {
 }
 
 def arquivoexiste(nomearquivo):
+    
     return os.path.exists(nomearquivo)
 
 def adicionarpet():
+    
     nome = input("Nome do pet: ").lower()
+    
     if not nome:
+        
         print("Você não inseriu um nome.")
         return
     especie = input("Espécie: ").lower()
+    
     if not especie:
+        
         print("Você não inseriu uma espécie.")
         return
     porte = input("Seu animal é de porte pequeno, médio ou grande?: ").lower()
+    
     if porte not in portesvalidos:
+        
         print("Você só pode escolher entre pequeno, médio e grande.")
         return
     nascimento = input("Data de nascimento: ")
+    
     if not nascimento:
         print("Você não inseriu uma data de nascimento.")
         return
@@ -34,46 +44,68 @@ def adicionarpet():
     if not peso:
         print("Você não inseriu um peso.")
         return
+        
     arquivo = open("pets.txt", "a")
     arquivo.write(f"{nome};{especie};{porte};{nascimento};{peso}\n")
     arquivo.close()
     petslist.append(nome)
+    
     print("Pet cadastrado.")
     print("Lista dos seus pets:", petslist)
 
 def visualizarpet():
+    
     try:
+        
         if not arquivoexiste("pets.txt"):
+            
             print("Nenhum pet cadastrado.")
             return
+            
         arquivo = open("pets.txt", "r")
         linhas = arquivo.readlines()
         arquivo.close()
+        
         if not linhas:
+            
             print("Não há conteúdo no arquivo para ser visualizado.")
             return
+            
         for linha in sorted(linhas):
+            
             partes = linha.strip().split(";")
+            
             if len(partes) == 5:
+                
                 nome, especie, porte, nascimento, peso = partes
                 print(f"Nome: {nome} | Espécie: {especie} | Porte: {porte} | Nascimento: {nascimento} | Peso: {peso}kg")
+                
             else:
+                
                 print(f"[⚠️ Linha inválida ignorada]: {linha.strip()}")
+                
     except FileNotFoundError:
+        
         print("Arquivo não encontrado. Nenhum pet cadastrado.")
 
 def editarpet():
+    
     nomepet = input("Digite o nome do pet que deseja editar: ")
+    
     if not arquivoexiste("pets.txt"):
         print("Arquivo de pets não encontrado.")
         return
+        
     arquivo = open("pets.txt", "r")
     linhas = arquivo.readlines()
     arquivo.close()
     pets = []
     encontrado = False
+    
     for linha in linhas:
+        
         if linha.startswith(nomepet + ";"):
+            
             nome = input("Novo nome: ")
             especie = input("Nova espécie: ")
             porte = input("Novo porte: ")
@@ -81,43 +113,64 @@ def editarpet():
             peso = input("Novo peso: ")
             pets.append(f"{nome};{especie};{porte};{nascimento};{peso}\n")
             encontrado = True
+            
         else:
+            
             pets.append(linha)
+            
     if encontrado:
+        
         arquivo = open("pets.txt", "w")
         arquivo.writelines(pets)
         arquivo.close()
         print("Pet atualizado com sucesso!")
+        
     else:
+        
         print("Pet não encontrado.")
 
 def excluirpet():
+    
     nomepet = input("Digite o nome do pet que deseja excluir: ")
+    
     if not arquivoexiste("pets.txt"):
+        
         print("Arquivo de pets não encontrado.")
         return
+        
     arquivo = open("pets.txt", "r")
     linhas = arquivo.readlines()
     arquivo.close()
     pets = []
     excluido = False
     for linha in linhas:
+        
         if linha.startswith(nomepet + ";"):
+            
             excluido = True
+            
         else:
+            
             pets.append(linha)
+            
     if excluido:
+        
         arquivo = open("pets.txt", "w")
         arquivo.writelines(pets)
         arquivo.close()
         print(f"Pet {nomepet} excluído.")
+        
     else:
+        
         print("Pet não encontrado.")
 
 def registrarevento():
+    
     if not arquivoexiste("pets.txt") or os.stat("pets.txt").st_size == 0:
+        
         print("Você não tem pets cadastrados.")
         return
+        
     data = input("Data do evento: ")
     nomepet = input("Nome do pet: ")
     tipoevento = input("Tipo de evento (vacina, consulta, remédio): ").lower()
@@ -128,13 +181,18 @@ def registrarevento():
     print("Evento registrado.")
 
 def exibireventos():
+    
     if not arquivoexiste("eventos.txt"):
+        
         print("Nenhum evento registrado.")
         return
+        
     arquivo = open("eventos.txt", "r")
     linhas = arquivo.readlines()
     arquivo.close()
+    
     for linha in linhas:
+        
         partes = linha.strip().split(";")
         if len(partes) == 4:
             data, nomepet, tipo, obs = partes
