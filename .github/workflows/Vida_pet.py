@@ -465,9 +465,3 @@ while True:
     else:
         
         print("Opção inválida. Tente novamente.")
-
-def limpar_arquivo_pets():
-    open("pets.txt", "w").close()
-    print("Arquivo de pets limpo.")
-
-limpar_arquivo()
