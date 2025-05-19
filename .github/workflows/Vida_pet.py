@@ -58,7 +58,7 @@ def adicionarpet():
         return
         
     arquivo = open("pets.txt", "a")
-    arquivo.write(f"{nome};{especie};{porte};{nascimento};{peso}\n")
+    arquivo.write(f"Nome: {nome};Espécie: {especie};Porte: {porte};Nascimento: {nascimento};Peso: {peso}\n")
     arquivo.close()
     petslist.append(nome)
     
@@ -123,7 +123,7 @@ def editarpet():
             porte = input("Novo porte: ")
             nascimento = input("Nova data de nascimento: ")
             peso = input("Novo peso: ")
-            pets.append(f"{nome};{especie};{porte};{nascimento};{peso}\n")
+            pets.append(f"Nome: {nome};Espécie: {especie};Porte: {porte};Nascimento: {nascimento};Peso: {peso}\n")
             encontrado = True
             
         else:
@@ -188,7 +188,7 @@ def registrarevento():
     tipoevento = input("Tipo de evento (vacina, consulta, remédio): ").lower()
     observacoes = input("Observações: ")
     arquivo = open("eventos.txt", "a")
-    arquivo.write(f"{data};{nomepet};{tipoevento};{observacoes}\n")
+    arquivo.write(f"Data: {data};Nome: {nomepet};Tipo de evento: {tipoevento};Obs: {observacoes}\n")
     arquivo.close()
     print("Evento registrado.")
 
@@ -217,7 +217,7 @@ def definirmeta():
     descricao = input("Descrição da meta: ")
     frequencia = input("Frequência: ")
     arquivo = open("metas.txt", "a")
-    arquivo.write(f"{descricao};{frequencia}\n")
+    arquivo.write(f"Descrição: {descricao};Frequência: {frequencia}\n")
     arquivo.close()
     print("Meta registrada.")
 
@@ -246,7 +246,7 @@ def cumprirmeta():
     descricao = input("Digite a descrição exata da meta que você cumpriu: ")
     data = datetime.datetime.now().strftime("%d/%m/%Y")
     arquivo = open("cumprimentos.txt", "a")
-    arquivo.write(f"{descricao};{data}\n")
+    arquivo.write(f"Descrição: {descricao};Data: {data}\n")
     arquivo.close()
     print("Cumprimento registrado.")
 
@@ -388,7 +388,7 @@ def escolherpetshopproximo():
             petshopescolhido = opcoespetshop[opcao]
             print(f"Você escolheu: {petshopescolhido}")
             arquivo = open("petshopescolhido.txt", "a")
-            arquivo.write(f"{petshopescolhido}\n")
+            arquivo.write(f"Pet shop escolhido: {petshopescolhido}\n")
             arquivo.close()
             break
             
