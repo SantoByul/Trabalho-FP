@@ -1,1 +1,102 @@
+VIDA PET – Sistema de Gerenciamento de Cuidados com Pets
+Este é um sistema simples, escrito em Python, que permite o gerenciamento de informações de animais de estimação, incluindo dados pessoais, eventos de saúde, metas de cuidado e seleção de petshop dependendo do local do usuario. É executado via terminal e utiliza arquivos .txt para armazenamento local.
 
+Funcionalidades:
+
+1 - Adicionar Pet
+
+2 - Visualizar Pets Cadastrados
+
+3 - Editar Pet
+
+4 - Excluir Pet
+
+5 - Registrar Evento de Saúde
+
+6 - Exibir Eventos Registrados
+
+7 - Definir Metas de Saúde
+
+8 - Exibir Metas
+
+9 - egistrar Cumprimento de Metas
+
+10 - Verificar Cumprimentos Realizados
+
+11 - Sugestões de Cuidados Personalizados
+
+12 - Escolher Petshop Mais Próximo
+
+0 - Sair do Sistema
+
+Como Usar:
+
+O menu principal será exibido com todas as opções listadas. O usuário deve inserir o número da opção desejada para executar a funcionalidade correspondente como demonstrada no proprio codigo e nas funcionalidades demonstradas.
+
+Detalhamento das Funções:
+
+1. adicionarpet()
+Solicita os dados do pet (nome, espécie, porte, nascimento, peso) e salva no arquivo pets.txt.
+
+Valida entradas como porte e peso
+
+Exibe mensagem de sucesso e lista atualizada
+
+2. visualizarpet()
+Lê o arquivo pets.txt e exibe todos os pets cadastrados em ordem alfabética. Caso o arquivo esteja vazio ou não exista, informa ao usuário.
+
+3. editarpet()
+Permite alterar os dados de um pet já cadastrado, com base no nome. Salva as alterações no pets.txt.
+
+4. excluirpet()
+Remove um pet do arquivo pets.txt com base no nome informado.
+
+5. registrarevento()
+Registra um evento de saúde (vacina, consulta ou remédio) relacionado a um pet. Os dados são armazenados em eventos.txt.
+
+6. exibireventos()
+Exibe todos os eventos registrados no arquivo eventos.txt.
+
+7. definirmeta()
+Permite ao usuário registrar metas de saúde para seus pets, como "Levar ao veterinário mensalmente". Os dados são armazenados em metas.txt.
+
+8. exibirmetas()
+Mostra todas as metas registradas em metas.txt.
+
+9. cumprirmeta()
+Registra quando uma meta é cumprida, salvando no arquivo cumprimentos.txt com a data atual.
+
+10. verificarcumprimento()
+Verifica quantas vezes cada meta registrada em metas.txt foi cumprida, com base nos registros em cumprimentos.txt.
+
+11. sugestoescuidados()
+Com base na espécie, idade e porte do pet, oferece sugestões personalizadas de cuidado.
+
+Exemplos de Uso:
+
+Vacinação de um PET registrado em um local proximo ao usuario para sua comodidade.
+
+Tipo de alimentação que deve ter em mente no momento de alimentar o PET.
+
+Frequência das consultas que o PET deve estar.
+
+Brinquedos e atividades físicas necessarias para o PET especifico.
+
+12. escolherpetshopproximo()
+Permite ao usuário selecionar um petshop próximo de uma lista de unidades. A escolha é registrada em petshopescolhido.txt.
+
+Estrutura de Arquivos Criados
+pets.txt: Dados dos pets
+
+eventos.txt: Eventos de saúde
+
+metas.txt: Metas definidas
+
+cumprimentos.txt: Registros de metas cumpridas
+
+petshopescolhido.txt: Registro de petshop escolhido
+
+Requisitos:
+
+Python 3.5
+Terminal com suporte à entrada/saída padrão
