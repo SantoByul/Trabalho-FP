@@ -1,4 +1,5 @@
 VIDA PET – Sistema de Gerenciamento de Cuidados com Pets
+
 Este é um sistema simples, escrito em Python, que permite o gerenciamento de informações de animais de estimação, incluindo dados pessoais, eventos de saúde, metas de cuidado e seleção de petshop dependendo do local do usuario. É executado via terminal e utiliza arquivos .txt para armazenamento local.
 
 Funcionalidades:
