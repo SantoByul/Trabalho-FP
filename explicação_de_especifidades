@@ -1,0 +1,158 @@
+
+# bom , esse arquivo serve para explicar algumas particularidades que a senhora ainda não nos ensinou 
+nascimento = input("Data de nascimento: ")
+
+# 1."if not x" 
+if not nascimento:
+        print("Você não inseriu uma data de nascimento.")
+        return
+
+# isso serve para evitar que a pessoa deixe alguma informação em branco 
+
+# 2.."for linha in sorted(linhas):""
+for linha in sorted(linhas):
+            
+            partes = linha.strip().split(";")
+            
+            if len(partes) == 5:
+                
+                nome, especie, porte, nascimento, peso = partes
+                print(f"Nome: {nome} | Espécie: {especie} | Porte: {porte} | Nascimento: {nascimento} | Peso: {peso}kg")
+                
+            else:
+                
+                print(f"[⚠️ Linha inválida ignorada]: {linha.strip()}") 
+
+# essa parte do código serve para verificar se a pessoa colocou cinco intens (nome , especie, porte, nascimento e peso ) na lista partes , que é a lista que guardará as 
+# informações principais de cada pet .o for linha e sorted linhas linhas pega os itens da listas partes e faz as analises que estão dentro da identação : os separa com 
+# ; , verifica a quantidade de itens nessa lista e se algo tiver menos de 5 itens ou mais de 5 itens uma mensagem de linha inválida será printada no terminal 
+
+# 3. "função arquivoexiste"
+def arquivoexiste(nomearquivo):
+    
+    return os.path.exists(nomearquivo)
+# essa função vamos chama-la várias vezes no código para verificar se o arquivo existe ou não . 
+
+# 4."listapets"
+petslist = []
+# essa lista vai guardar o nome dos pets e vai ser printada só para o usuário saber quais pets foram cadastrados até o momento 
+
+# 5."editarpet()"
+def editarpet():
+    
+    nomepet = input("Digite o nome do pet que deseja editar: ")
+    
+    if not arquivoexiste("pets.txt"):
+        print("Arquivo de pets não encontrado.")
+        return
+        
+    arquivo = open("pets.txt", "r")
+    linhas = arquivo.readlines()
+    arquivo.close()
+    pets = []
+    encontrado = False
+    
+    for linha in linhas:
+        
+        if linha.startswith(nomepet + ";"):
+            
+            nome = input("Novo nome: ")
+            especie = input("Nova espécie: ")
+            porte = input("Novo porte: ")
+            nascimento = input("Nova data de nascimento: ")
+            peso = input("Novo peso: ")
+            pets.append(f"{nome};{especie};{porte};{nascimento};{peso}\n")
+            encontrado = True
+            
+        else:
+            
+            pets.append(linha)
+            
+    if encontrado:
+        
+        arquivo = open("pets.txt", "w")
+        arquivo.writelines(pets)
+        arquivo.close()
+        print("Pet atualizado com sucesso!")
+        
+    else:
+        
+        print("Pet não encontrado.")
+
+# vamos inicialmente declarar o estado do pet , "encontrado" , como false , para fazer posteriormente a verificação se é false ou não .linhas é a variável que representa o arquivo lido por inteiro 
+# e já linha é uma parte do arquivo , que se for igual ao nomepet  a variável encontrado tem o valor booleano true , e o arquivo é atualizado com os novos dados do pet . 
+# . o  primeiro if serve para verificar se a estrutura da parte do arquivo que estamos editando começa com  " nomepet ;" , se não entra em ação o else que adicionará os itens da lista com o nome dos pets adicionados 
+# "pets" , para que ao editar o nome de um pet , os outros pets não tenham suas informações alteradas também .
+
+# 4."def excluirpet()"
+def excluirpet():
+    
+    nomepet = input("Digite o nome do pet que deseja excluir: ")
+    
+    if not arquivoexiste("pets.txt"):
+        
+        print("Arquivo de pets não encontrado.")
+        return
+        
+    arquivo = open("pets.txt", "r")
+    linhas = arquivo.readlines()
+    arquivo.close()
+    pets = []
+    excluido = False
+    for linha in linhas:
+        
+        if linha.startswith(nomepet + ";"):
+            
+            excluido = True
+            
+        else:
+            
+            pets.append(linha)
+            
+    if excluido:
+        
+        arquivo = open("pets.txt", "w")
+        arquivo.writelines(pets)
+        arquivo.close()
+        print(f"Pet {nomepet} excluído.")
+        
+    else:
+        
+        print("Pet não encontrado.")
+        
+# nessa função , excluir , a variável excluido vai começar como verdadeira ("False"), se o nomepet não estiver na lista  no arquivo "pets.txt" , o programa vai printar que o pet não foi encontrado
+#  e não vai excluir informações do arquivo.Agora se o nomepet estiver no arquivo  "pets.txt", o programa vai abrir o arquivo e vai lê-lo linha por linha , na parte do "for linha in linhas", 
+# se a parte do arquivo começar com a estrutura "nomepet ;" , o programa vai atribuir o excluido como true , agora se não tiver essa estrutura , vamos usar o pets.append(linha)
+# para manter inalterado as informações dos outros pets, os eventos e metas . No if excluido vai considerar o excluido como true , e vai reatribuir o arquivo que antes era do tipo "a" , para o tipo "w", 
+# com o else do segundo if , vamos apenas nos preparar para caso o usuário digite o nome de um pet que não existe no arquivo o programa não quebre e sim printar que o pet não foi encontrado .
+
+# 6."if not arquivoexiste("pets.txt") or os.stat("pets.txt").st_size == 0 "
+    
+    if not arquivoexiste("pets.txt") or os.stat("pets.txt").st_size == 0:
+        
+        print("Você não tem pets cadastrados.")
+        return
+
+#isso serve para verificar se o pet existe ou não por meio da chamada da função arquivoexiste , ou por meio da invoçãon da biblioteca os e verificação de quantos bits o orquivo 
+# "pets.txt" tem , se for igual a zero , o programa printará que o usuário não tem pets cadastrados . Só para se preparar para caso de o usuário querer registrar um evento sem antes ter um pet cadastrado
+
+# 7.
+def exibireventos():
+    if not arquivoexiste("eventos.txt"):
+        
+        print("Nenhum evento registrado.")
+        return
+        
+    arquivo = open("eventos.txt", "r")
+    linhas = arquivo.readlines()
+    arquivo.close()
+    
+    for linha in linhas:
+        
+        partes = linha.strip().split(";")
+        if len(partes) == 4:
+            data, nomepet, tipo, obs = partes
+            print(f"Data: {data} | Pet: {nomepet} | Tipo: {tipo} | Obs: {obs}")
+
+
+# essa parte de "for linha in linhas" na fução exibireventos , serve para verificar se o usuário deixou alguma informação em branco  ou não . 
